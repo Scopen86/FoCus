@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <fstream>
 
 #include "RenderWindow.hpp"
 #include "defs.hpp"
@@ -18,7 +19,22 @@ int main(int argc, char* argv[]) {
 
     Entity background(backgroundTex, Vector2f(0, 0), Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT));
     Entity player(playerTex, Vector2f(100, 100));
-    Entity enemy(enemyTex, Vector2f(200, 200));
+
+    std::ifstream enemiesFile("./res/enemiesPos.txt");
+    std::vector<Entity> enemies;
+    if(enemiesFile.is_open()) {
+        int x, y, sizeX, sizeY;
+        std::string line;
+        while(enemiesFile >> x >> y >> sizeX >> sizeY) {
+            Entity enemy(enemyTex, Vector2f(x, y), Vector2f(sizeX, sizeY));
+            enemies.push_back(enemy);
+        }
+        enemiesFile.close();
+
+    } else {
+        std::cout << "Failed to open enemies file." << std::endl;
+        return 1;
+    }
     
     SDL_Event event;
     while(gameRunning) {
@@ -56,10 +72,21 @@ int main(int argc, char* argv[]) {
             player.setPos(Vector2f(playerPos.x, SCREEN_HEIGHT - player.getSize().y));
         }
         
+        // Check collision with enemies
+        for(Entity& enemy : enemies) {
+            Vector2f enemyPos = enemy.getPosition();
+            if(playerPos.x < enemyPos.x + enemy.getSize().x &&
+               playerPos.x + player.getSize().x > enemyPos.x &&
+               playerPos.y < enemyPos.y + enemy.getSize().y &&
+               playerPos.y + player.getSize().y > enemyPos.y) {
+                std::cout << "Collision detected!" << std::endl;
+            }
+        }
+
         window.clear();
         window.draw(background);
         window.draw(player);
-        window.draw(enemy);
+        for(Entity enemy : enemies) {window.draw(enemy);}
         window.display();
     }
 

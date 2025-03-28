@@ -37,7 +37,12 @@ void RenderWindow::draw(Entity& entity) {
     Vector2f pos = entity.getPosition();
     Vector2f size = entity.getSize();
 
-    SDL_Rect destRect = { pos.x, pos.y, size.x, size.y };
+    SDL_Rect destRect = { 
+        static_cast<int> (pos.x),
+        static_cast<int> (pos.y),
+        static_cast<int> (size.x),
+        static_cast<int> (size.y)
+    };
 
     SDL_RenderCopy(renderer, texture, NULL, &destRect);
 }
