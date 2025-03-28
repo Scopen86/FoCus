@@ -6,13 +6,19 @@
 
 #include "RenderWindow.hpp"
 #include "defs.hpp"
+#include "Entity.hpp"
 
 int main(int argc, char* argv[]) {
+    RenderWindow window;
     bool gameRunning = true;
    
-    std::string background = "./res/background.jpg";
-    std::string player = "./res/player.png";
-    RenderWindow window;
+    SDL_Texture* backgroundTex = window.loadTexture("./res/background.jpg");
+    SDL_Texture* playerTex = window.loadTexture("./res/player.png");
+    SDL_Texture* enemyTex = window.loadTexture("./res/squareEnemy.png");
+
+    Entity background(backgroundTex, Vector2f(0, 0), Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT));
+    Entity player(playerTex, Vector2f(100, 100));
+    Entity enemy(enemyTex, Vector2f(200, 200));
     
     SDL_Event event;
     while(gameRunning) {
@@ -23,10 +29,11 @@ int main(int argc, char* argv[]) {
         }
         
         window.clear();
-        window.draw(background, 0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-        window.draw(player, 100, 100, 50, 50);
+        window.draw(background);
+        window.draw(player);
+        window.draw(enemy);
         window.display();
     }
-
+    
     return 0;
 }

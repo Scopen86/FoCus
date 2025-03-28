@@ -11,6 +11,11 @@ struct Vector2f
         :x(p_x), y(p_y)
     {}
 
+    Vector2f operator+(const Vector2f& other) const
+    {
+        return Vector2f(x + other.x, y + other.y);
+    }
+    
     void print()
     {
         std::cout << "X: " << x << " Y: " << y << std::endl;

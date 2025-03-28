@@ -1,4 +1,6 @@
 #include <iostream>
+#include <SDL.h>
+#include <SDL_image.h>
 
 #include "RenderWindow.hpp"
 #include "defs.hpp"
@@ -30,28 +32,28 @@ bool RenderWindow::init() {
     return true;
 }
 
-void RenderWindow::draw(std::string path, int p_x, int p_y, int p_w, int p_h) {
-    SDL_Texture* texture = IMG_LoadTexture(renderer, path.c_str());
-    if (!texture) {
-        std::cout << "Failed to load texture. Error: " << SDL_GetError() << std::endl;
-        std::cout << "Path: " << path << std::endl;
-        return;
-    }
-    else {
-        std::cout << "Loaded texture at " << path << std::endl;
-    }
+void RenderWindow::draw(Entity& entity) {
+    SDL_Texture* texture = entity.getTex();
+    Vector2f pos = entity.getPosition();
+    Vector2f size = entity.getSize();
 
-    SDL_Rect destRect = { p_x, p_y, p_w, p_h };
+    SDL_Rect destRect = { pos.x, pos.y, size.x, size.y };
 
     SDL_RenderCopy(renderer, texture, NULL, &destRect);
-    SDL_DestroyTexture(texture);
 }
 
 void RenderWindow::clear() {
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
 }
 
 void RenderWindow::display() {
     SDL_RenderPresent(renderer);
+}
+
+SDL_Texture* RenderWindow::loadTexture(const std::string& filePath) {
+    SDL_Texture* texture = IMG_LoadTexture(renderer, filePath.c_str());
+    if (!texture) {
+        std::cout << "Failed to load texture. Error: " << IMG_GetError() << std::endl;
+    }
+    return texture;
 }
