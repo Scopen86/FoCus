@@ -10,6 +10,12 @@ RenderWindow::RenderWindow() {
     init();
     window = SDL_CreateWindow(WINDOW_TITLE, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT, 0);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+    // Load font here so that it doesn't need to be loaded every time drawText is called
+    font = TTF_OpenFont("./res/font.ttf", 24);
+    if (!font) {
+        std::cout << "Failed to load font! Error: " << TTF_GetError() << std::endl;
+    }
 }
 
 RenderWindow::~RenderWindow() {
@@ -124,23 +130,20 @@ void RenderWindow::shake(int direction) {
 }
 
 void RenderWindow::drawText(const std::string& text, Vector2f pos, SDL_Color color, int fontSize) {
-    font = TTF_OpenFont("./res/font.ttf", fontSize);
-    if (!font) {
-        std::cout << "Failed to load font. Error: " << TTF_GetError() << std::endl;
-        return;
-    }
 
     SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    if (!surface) return;
     
-    SDL_Rect destRect = { 
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    SDL_Rect destRect = {
         static_cast<int>(pos.x),
         static_cast<int>(pos.y),
-        surface->w,
-        surface->h 
+        surface->w, 
+        surface->h
     };
-
     SDL_FreeSurface(surface);
 
     SDL_RenderCopy(renderer, texture, NULL, &destRect);
+    // Destroy the texture after rendering because we get a new texture every frame
+    SDL_DestroyTexture(texture);
 }

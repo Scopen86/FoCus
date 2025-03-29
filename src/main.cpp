@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <sstream>
+#include <iomanip>
 
 #include "RenderWindow.hpp"
 #include "defs.hpp"
@@ -75,8 +77,11 @@ int main(int argc, char* argv[]) {
             window.draw(enemy);
         }
         window.drawText("HP: " + std::to_string(player.getHp()), Vector2f(10, 10), {255, 255, 255}, 24);
-        window.drawText("Time: " + std::to_string(SDL_GetTicks() / 1000), Vector2f(10, 40), {255, 255, 255}, 24);
-
+        float seconds = SDL_GetTicks() / 1000.0f;
+        std::stringstream timeStream;
+        timeStream << std::fixed << std::setprecision(2) << seconds;
+        window.drawText("Time: " + timeStream.str() + "s", Vector2f(10, 40), {255, 255, 255}, 24);
+        
         window.display();
     }
 
