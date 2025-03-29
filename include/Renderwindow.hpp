@@ -12,6 +12,7 @@ public:
     void draw(Entity& entity);
     void clear();
     void display();
+    void shake(int direction);
 private:
     SDL_Window* window;
     SDL_Renderer* renderer;

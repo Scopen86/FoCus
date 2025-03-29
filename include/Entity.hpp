@@ -14,15 +14,16 @@ class Entity {
         ~Entity() {}; //Implement this later
 
         SDL_Texture* getTex() const { return tex; }
-        Vector2f getPosition() const { return pos; }
+        Vector2f getPosition() { return pos; }
         Vector2f getSize() const { return size; }
-        float getSpeed() const { return speed; }
+        float getSpeed() { return speed; }
+        void setSpeed(float newSpeed) { speed = newSpeed; }
 
         void move(Vector2f delta) { pos = pos + delta; }
         void setPos(Vector2f newPos) { pos = newPos; }
-    private:
+    protected:
         Vector2f pos;
         Vector2f size;
         SDL_Texture* tex;
-        const float speed = 3.0;
+        float speed = 3.0;
 };

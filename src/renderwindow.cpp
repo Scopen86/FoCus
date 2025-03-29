@@ -62,3 +62,55 @@ SDL_Texture* RenderWindow::loadTexture(const std::string& filePath) {
     }
     return texture;
 }
+
+void RenderWindow::shake(int direction) {
+    int shakeAmount = 10; 
+    int shakeDuration = 10; // milliseconds
+    
+    int x, y;
+    SDL_GetWindowPosition(window, &x, &y);
+    
+    switch(direction) {
+        case 0: // Up
+            for(int i = 0; i < shakeDuration / 10; ++i) {
+                SDL_SetWindowPosition(window, x, y - shakeAmount);
+                SDL_Delay(10);
+                SDL_SetWindowPosition(window, x, y + shakeAmount);
+                SDL_Delay(10);
+            }
+            break;
+        case 1: // Down
+            for(int i = 0; i < shakeDuration / 10; ++i) {
+                SDL_SetWindowPosition(window, x, y + shakeAmount);
+                SDL_Delay(10);
+                SDL_SetWindowPosition(window, x, y - shakeAmount);
+                SDL_Delay(10);
+            }
+            break;
+        case 2: // Left
+            for(int i = 0; i < shakeDuration / 10; ++i) {
+                SDL_SetWindowPosition(window, x - shakeAmount, y);
+                SDL_Delay(10);
+                SDL_SetWindowPosition(window, x + shakeAmount, y);
+                SDL_Delay(10);
+            }
+            break;
+        case 3: // Right
+            for(int i = 0; i < shakeDuration / 10; ++i) {
+                SDL_SetWindowPosition(window, x + shakeAmount, y);
+                SDL_Delay(10);
+                SDL_SetWindowPosition(window, x - shakeAmount, y);
+                SDL_Delay(10);
+            }
+            break;
+        default:
+            std::cout << "Shaking in all directions." << std::endl;
+            this->shake(0);
+            this->shake(1);
+            this->shake(2);
+            this->shake(3);
+            break;
+    }
+    // Reset window position
+    SDL_SetWindowPosition(window, x, y);
+}

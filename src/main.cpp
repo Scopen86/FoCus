@@ -8,6 +8,8 @@
 #include "RenderWindow.hpp"
 #include "defs.hpp"
 #include "Entity.hpp"
+#include "Logic.hpp"
+#include "Player.hpp"
 
 int main(int argc, char* argv[]) {
     RenderWindow window;
@@ -18,7 +20,7 @@ int main(int argc, char* argv[]) {
     SDL_Texture* enemyTex = window.loadTexture("./res/squareEnemy.png");
 
     Entity background(backgroundTex, Vector2f(0, 0), Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT));
-    Entity player(playerTex, Vector2f(100, 100));
+    Player player(playerTex, Vector2f(30, SCREEN_HEIGHT / 2), 4.0f);
 
     std::ifstream enemiesFile("./res/enemiesPos.txt");
     std::vector<Entity> enemies;
@@ -44,44 +46,25 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // Handle player movement
-        Vector2f deltaPos(0, 0);
-        const Uint8* state = SDL_GetKeyboardState(NULL);
-        if(state[SDL_SCANCODE_W] || state[SDL_SCANCODE_UP]) {
-            deltaPos.y -= player.getSpeed();
-        }
-        if(state[SDL_SCANCODE_S] || state[SDL_SCANCODE_DOWN]) {
-            deltaPos.y += player.getSpeed();
-        }
-        if(state[SDL_SCANCODE_A] || state[SDL_SCANCODE_LEFT]) {
-            deltaPos.x -= player.getSpeed();
-        }
-        if(state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT]) {
-            deltaPos.x += player.getSpeed();
-        }
-        player.move(deltaPos);
+        Logic logic;
+        logic.handlePlayerMovement(player);
+        if(logic.checkCollision(player, enemies)) {
+            player.hit();
+            float tempSpeed = player.getSpeed();
+            player.setSpeed(0.0f);
+            
+            window.shake(-1);
+            SDL_Delay(50);
 
-        // Prevent player from going off screen
-        Vector2f playerPos = player.getPosition();
-        if(playerPos.x < 0) player.setPos(Vector2f(0, playerPos.y));
-        if(playerPos.y < 0) player.setPos(Vector2f(playerPos.x, 0));
-        if(playerPos.x + player.getSize().x > SCREEN_WIDTH) {
-            player.setPos(Vector2f(SCREEN_WIDTH - player.getSize().x, playerPos.y));
-        }
-        if(playerPos.y + player.getSize().y > SCREEN_HEIGHT) {
-            player.setPos(Vector2f(playerPos.x, SCREEN_HEIGHT - player.getSize().y));
-        }
-        
-        // Check collision with enemies
-        for(Entity& enemy : enemies) {
-            Vector2f enemyPos = enemy.getPosition();
-            if(playerPos.x < enemyPos.x + enemy.getSize().x &&
-               playerPos.x + player.getSize().x > enemyPos.x &&
-               playerPos.y < enemyPos.y + enemy.getSize().y &&
-               playerPos.y + player.getSize().y > enemyPos.y) {
-                std::cout << "Collision detected!" << std::endl;
+            player.setSpeed(tempSpeed);
+
+            std::cout << "Player HP: " << player.getHp() << std::endl;
+            if(player.getHp() <= 0) {
+                std::cout << "Game Over!" << std::endl;
+                gameRunning = false;
             }
         }
+        
 
         window.clear();
         window.draw(background);
