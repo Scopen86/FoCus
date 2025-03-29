@@ -10,10 +10,17 @@
 #include "Entity.hpp"
 #include "Logic.hpp"
 #include "Player.hpp"
+#include "Audio.hpp"
 
 int main(int argc, char* argv[]) {
     RenderWindow window;
     bool gameRunning = true;
+
+    Audio backgroundMusic;
+    backgroundMusic.loadSound("./res/Chronos(cut).wav");
+    backgroundMusic.playSound();
+    Audio gameOverSound;
+    gameOverSound.loadSound("./res/gameOver.wav");
    
     SDL_Texture* backgroundTex = window.loadTexture("./res/background.jpg");
     SDL_Texture* playerTex = window.loadTexture("./res/player.png");
@@ -50,26 +57,26 @@ int main(int argc, char* argv[]) {
         logic.handlePlayerMovement(player);
         if(logic.checkCollision(player, enemies)) {
             player.hit();
-            float tempSpeed = player.getSpeed();
-            player.setSpeed(0.0f);
-            
             window.shake(-1);
-            SDL_Delay(50);
-
-            player.setSpeed(tempSpeed);
 
             std::cout << "Player HP: " << player.getHp() << std::endl;
             if(player.getHp() <= 0) {
+                gameOverSound.playSound();
                 std::cout << "Game Over!" << std::endl;
                 gameRunning = false;
             }
         }
         
-
         window.clear();
+        
         window.draw(background);
         window.draw(player);
-        for(Entity enemy : enemies) {window.draw(enemy);}
+        for(Entity enemy : enemies) {
+            window.draw(enemy);
+        }
+        window.drawText("HP: " + std::to_string(player.getHp()), Vector2f(10, 10), {255, 255, 255}, 24);
+        window.drawText("Time: " + std::to_string(SDL_GetTicks() / 1000), Vector2f(10, 40), {255, 255, 255}, 24);
+
         window.display();
     }
 

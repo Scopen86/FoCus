@@ -5,7 +5,9 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "C:/SDL2-w64/include/SDL2",
-                "C:/SDL2_image-w64/include/SDL2"
+                "C:/SDL2_image-w64/include/SDL2",
+                "C:/SDL2_Mixer-w64/include/SDL2",
+                "C:/SDL2_TTF-w64/include/SDL2"
             ],
             "defines": [
                 "_DEBUG",

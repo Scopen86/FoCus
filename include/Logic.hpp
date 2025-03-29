@@ -6,6 +6,6 @@
 class Logic {
     public:
         Logic() {};
-        void handlePlayerMovement(Player& player);;
-        bool checkCollision(Player& player, std::vector<Entity>& enemies);;
+        void handlePlayerMovement(Player& player);
+        bool checkCollision(Player& player, std::vector<Entity>& enemies);
 };

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 
 #include "RenderWindow.hpp"
 #include "defs.hpp"
@@ -15,6 +16,7 @@ RenderWindow::~RenderWindow() {
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
     IMG_Quit();
+    TTF_CloseFont(font);
     SDL_Quit();
 }
 
@@ -29,6 +31,11 @@ bool RenderWindow::init() {
         return false;
     }
     
+    if (TTF_Init() == -1) {
+        std::cout << "Failed to initialize SDL_TTF. Error: " << TTF_GetError() << std::endl;
+        return false;
+    }
+
     return true;
 }
 
@@ -64,7 +71,8 @@ SDL_Texture* RenderWindow::loadTexture(const std::string& filePath) {
 }
 
 void RenderWindow::shake(int direction) {
-    int shakeAmount = 10; 
+
+    int shakeAmount = 10; // pixels
     int shakeDuration = 10; // milliseconds
     
     int x, y;
@@ -113,4 +121,26 @@ void RenderWindow::shake(int direction) {
     }
     // Reset window position
     SDL_SetWindowPosition(window, x, y);
+}
+
+void RenderWindow::drawText(const std::string& text, Vector2f pos, SDL_Color color, int fontSize) {
+    font = TTF_OpenFont("./res/font.ttf", fontSize);
+    if (!font) {
+        std::cout << "Failed to load font. Error: " << TTF_GetError() << std::endl;
+        return;
+    }
+
+    SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
+    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+    
+    SDL_Rect destRect = { 
+        static_cast<int>(pos.x),
+        static_cast<int>(pos.y),
+        surface->w,
+        surface->h 
+    };
+
+    SDL_FreeSurface(surface);
+
+    SDL_RenderCopy(renderer, texture, NULL, &destRect);
 }
