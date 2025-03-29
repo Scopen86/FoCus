@@ -65,6 +65,7 @@ int main(int argc, char* argv[]) {
             if(player.getHp() <= 0) {
                 gameOverSound.playSound();
                 std::cout << "Game Over!" << std::endl;
+                SDL_Delay(2000); 
                 gameRunning = false;
             }
         }
