@@ -33,8 +33,6 @@
 ## **Setup** 
 
 
-- *Mọi khó khăn trong phần cài đặt, trong quá trình chơi, hãy email qua 21020355@vnu.edu.vn.*
-
 ## **See also**  
 
 ### *Các kỹ thuật sử dụng*  
