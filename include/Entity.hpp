@@ -27,5 +27,5 @@ class Entity {
         SDL_Texture* tex;
         Vector2f pos;
         Vector2f size;
-        float speed = 3.0;
+        float speed = 400.0f;
 };

@@ -13,10 +13,14 @@
 #include "Logic.hpp"
 #include "Player.hpp"
 #include "Audio.hpp"
+#include "Timer.hpp"
 
 int main(int argc, char* argv[]) {
     RenderWindow window;
     bool gameRunning = true;
+
+    Timer gameTimer;
+    gameTimer.start();
 
     Audio backgroundMusic;
     backgroundMusic.loadSound("./res/Chronos(cut).wav");
@@ -29,7 +33,7 @@ int main(int argc, char* argv[]) {
     SDL_Texture* enemyTex = window.loadTexture("./res/squareEnemy.png");
 
     Entity background(backgroundTex, Vector2f(0, 0), Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT));
-    Player player(playerTex, Vector2f(30, SCREEN_HEIGHT / 2), 4.0f);
+    Player player(playerTex, Vector2f(30, SCREEN_HEIGHT / 2), 3);
 
     std::ifstream enemiesFile("./res/enemiesPos.txt");
     std::vector<Entity> enemies;
@@ -49,6 +53,10 @@ int main(int argc, char* argv[]) {
     
     SDL_Event event;
     while(gameRunning) {
+        // Update delta time at the beginning of each frame
+        gameTimer.update();
+        float deltaTime = gameTimer.getDeltaTime();
+        
         while(SDL_PollEvent(&event)) {
             if(event.type == SDL_QUIT) {
                 gameRunning = false;
@@ -56,7 +64,7 @@ int main(int argc, char* argv[]) {
         }
 
         Logic logic;
-        logic.handlePlayerMovement(player);
+        logic.handlePlayerMovement(player, deltaTime);
         if(logic.checkCollision(player, enemies)) {
             player.hit();
             window.shake(-1);
@@ -77,11 +85,12 @@ int main(int argc, char* argv[]) {
         for(Entity enemy : enemies) {
             window.draw(enemy);
         }
-        window.drawText("HP: " + std::to_string(player.getHp()), Vector2f(10, 10), {255, 255, 255}, 24);
+        
+        window.drawText("HP: " + std::to_string(player.getHp()), Vector2f(10, 10), WHITE, 24);
         float seconds = SDL_GetTicks() / 1000.0f;
         std::stringstream timeStream;
         timeStream << std::fixed << std::setprecision(2) << seconds;
-        window.drawText("Time: " + timeStream.str() + "s", Vector2f(10, 40), {255, 255, 255}, 24);
+        window.drawText("Time: " + timeStream.str() + "s", Vector2f(10, 40), WHITE, 24);
         
         window.display();
     }

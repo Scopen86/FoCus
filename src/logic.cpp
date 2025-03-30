@@ -3,20 +3,22 @@
 #include "RenderWindow.hpp"
 #include "Vector2f.hpp"
 
-void Logic::handlePlayerMovement(Player& player) {
+void Logic::handlePlayerMovement(Player& player, float deltaTime) {
     Vector2f deltaPos(0, 0);
     const Uint8* state = SDL_GetKeyboardState(NULL);
+    float speed = player.getSpeed() * deltaTime; 
+    
     if(state[SDL_SCANCODE_W] || state[SDL_SCANCODE_UP]) {
-        deltaPos.y -= player.getSpeed();
+        deltaPos.y -= speed;
     }
     if(state[SDL_SCANCODE_S] || state[SDL_SCANCODE_DOWN]) {
-        deltaPos.y += player.getSpeed();
+        deltaPos.y += speed;
     }
     if(state[SDL_SCANCODE_A] || state[SDL_SCANCODE_LEFT]) {
-        deltaPos.x -= player.getSpeed();
+        deltaPos.x -= speed;
     }
     if(state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT]) {
-        deltaPos.x += player.getSpeed();
+        deltaPos.x += speed;
     }
     player.move(deltaPos);
 

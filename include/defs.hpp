@@ -7,3 +7,5 @@ inline const int SCREEN_HEIGHT = 720;
 inline const char* WINDOW_TITLE = "Test";
 
 inline const Vector2f DEFAULT_SIZE(32, 32);
+
+inline const SDL_Color WHITE = {255, 255, 255, 255};
