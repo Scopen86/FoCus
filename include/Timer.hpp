@@ -8,7 +8,8 @@ public:
     void start();
     void stop();
     void update();
-    
+
+    float getTime();
     float getDeltaTime() const { return mDeltaTime; }
     
 private:

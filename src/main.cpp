@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
 
     Timer gameTimer;
     gameTimer.start();
-
+    
     Audio backgroundMusic;
     backgroundMusic.loadSound("./res/Chronos(cut).wav");
     backgroundMusic.playSound();
@@ -58,6 +58,7 @@ int main(int argc, char* argv[]) {
         // Update delta time at the beginning of each frame
         gameTimer.update();
         float deltaTime = gameTimer.getDeltaTime();
+        float currentTime = gameTimer.getTime();
         
         while(SDL_PollEvent(&event)) {
             if(event.type == SDL_QUIT) {
@@ -70,14 +71,13 @@ int main(int argc, char* argv[]) {
         window.draw(background);
         window.draw(player);
         for(Enemy& enemy : enemies) {
-            enemy.update(deltaTime);
-            window.draw(enemy);
+            if(currentTime >= enemy.getTiming()) {
+                window.draw(enemy);
+                enemy.update(deltaTime);
+            }
         }
         window.drawText("HP: " + std::to_string(player.getHp()), Vector2f(10, 10), WHITE, 24);
-        float seconds = SDL_GetTicks() / 1000.0f;
-        std::stringstream timeStream;
-        timeStream << std::fixed << std::setprecision(2) << seconds;
-        window.drawText("Time: " + timeStream.str() + "s", Vector2f(10, 40), WHITE, 24);
+        window.drawText("Time: " + std::to_string(currentTime) + "s", Vector2f(10, 40), WHITE, 24);
         
         window.display();
 

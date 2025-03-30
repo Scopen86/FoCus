@@ -1,3 +1,5 @@
+#include <cmath>
+
 #include "Timer.hpp"
 
 Timer::Timer() 
@@ -21,4 +23,11 @@ void Timer::update() {
     mDeltaTime = (currentTime - mLastTime) / 1000.0f;
     
     mLastTime = currentTime;
+}
+
+float Timer::getTime() {
+    if (!mStarted) return 0.0f;
+    
+    float seconds = SDL_GetTicks() / 1000.0f;
+    return floor(seconds * 100 + 0.5) / 100;
 }

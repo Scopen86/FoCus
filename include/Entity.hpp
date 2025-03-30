@@ -14,7 +14,9 @@ class Entity {
         Entity(SDL_Texture* p_tex, Vector2f p_pos)
         :tex(p_tex), pos(p_pos), size(Vector2f(32, 32)), velocity(0, 0) {};
 
-        ~Entity() {}; //Implement this later
+        ~Entity() {
+            SDL_DestroyTexture(tex);
+        };
 
         SDL_Texture* getTex() const { return tex; }
         Vector2f getPosition() const { return pos; }

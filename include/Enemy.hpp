@@ -8,7 +8,7 @@ class Enemy : public Entity {
         Enemy(SDL_Texture* p_tex, Vector2f p_pos, Vector2f p_size, Vector2f p_velocity, float p_timing)
         :Entity(p_tex, p_pos, p_size, p_velocity), timing(p_timing) {};
 
-        ~Enemy() {}; //Implement this later
+        float getTiming() const { return timing; }
 
     private:
         float timing; // Spawn timing
