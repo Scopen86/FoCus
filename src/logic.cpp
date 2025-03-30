@@ -35,9 +35,9 @@ void Logic::handlePlayerMovement(Player& player, float deltaTime) {
     }
 }
 
-bool Logic::checkCollision(Player& player, std::vector<Entity>& enemies) {
+bool Logic::checkCollision(Player& player, std::vector<Enemy>& enemies) {
     Vector2f playerPos = player.getPosition();
-    for(Entity& enemy : enemies) {
+    for(Enemy& enemy : enemies) {
         Vector2f enemyPos = enemy.getPosition();
         if(playerPos.x < enemyPos.x + enemy.getSize().x &&
             playerPos.x + player.getSize().x > enemyPos.x &&

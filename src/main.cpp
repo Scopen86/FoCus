@@ -14,7 +14,7 @@
 #include "Player.hpp"
 #include "Audio.hpp"
 #include "Timer.hpp"
-
+#include "Enemy.hpp"
 
 int main(int argc, char* argv[]) {
     RenderWindow window;
@@ -37,13 +37,13 @@ int main(int argc, char* argv[]) {
     Player player(playerTex, Vector2f(30, SCREEN_HEIGHT / 2), 3);
 
     std::ifstream enemiesFile("./res/enemiesPos.txt");
-    std::vector<Entity> enemies;
+    std::vector<Enemy> enemies;
     if(enemiesFile.is_open()) {
         int x, y, sizeX, sizeY;
-        float vecX, vecY;
+        float vecX, vecY, timing;
         std::string line;
-        while(enemiesFile >> x >> y >> sizeX >> sizeY >> vecX >> vecY) {
-            Entity enemy(enemyTex, Vector2f(x, y), Vector2f(sizeX, sizeY), Vector2f(vecX, vecY));
+        while(enemiesFile >> x >> y >> sizeX >> sizeY >> vecX >> vecY >> timing) {
+            Enemy enemy(enemyTex, Vector2f(x, y), Vector2f(sizeX, sizeY), Vector2f(vecX, vecY), timing);
             enemies.push_back(enemy);
         }
         enemiesFile.close();
@@ -69,7 +69,8 @@ int main(int argc, char* argv[]) {
         
         window.draw(background);
         window.draw(player);
-        for(Entity& enemy : enemies) {
+        for(Enemy& enemy : enemies) {
+            enemy.update(deltaTime);
             window.draw(enemy);
         }
         window.drawText("HP: " + std::to_string(player.getHp()), Vector2f(10, 10), WHITE, 24);
@@ -79,10 +80,6 @@ int main(int argc, char* argv[]) {
         window.drawText("Time: " + timeStream.str() + "s", Vector2f(10, 40), WHITE, 24);
         
         window.display();
-
-        for(Entity& enemy : enemies) {
-            enemy.update(deltaTime);
-        }
 
         Logic logic;
         logic.handlePlayerMovement(player, deltaTime);
@@ -98,8 +95,6 @@ int main(int argc, char* argv[]) {
                 gameRunning = false;
             }
         }
-        
-        
     }
 
     return 0;
