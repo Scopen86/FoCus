@@ -4,23 +4,24 @@
 #include "Vector2f.hpp"
 
 void Logic::handlePlayerMovement(Player& player, float deltaTime) {
-    Vector2f deltaPos(0, 0);
+    Vector2f deltaVelocity(0, 0);
     const Uint8* state = SDL_GetKeyboardState(NULL);
-    float speed = player.getSpeed() * deltaTime; 
+    float speed = 400.0f;
     
     if(state[SDL_SCANCODE_W] || state[SDL_SCANCODE_UP]) {
-        deltaPos.y -= speed;
+        deltaVelocity.y -= speed;
     }
     if(state[SDL_SCANCODE_S] || state[SDL_SCANCODE_DOWN]) {
-        deltaPos.y += speed;
+        deltaVelocity.y += speed;
     }
     if(state[SDL_SCANCODE_A] || state[SDL_SCANCODE_LEFT]) {
-        deltaPos.x -= speed;
+        deltaVelocity.x -= speed;
     }
     if(state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT]) {
-        deltaPos.x += speed;
+        deltaVelocity.x += speed;
     }
-    player.move(deltaPos);
+    player.setVelocity(deltaVelocity);
+    player.update(deltaTime);
 
     // Prevent player from going off screen
     Vector2f playerPos = player.getPosition();

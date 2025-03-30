@@ -19,24 +19,19 @@ class Entity {
         SDL_Texture* getTex() const { return tex; }
         Vector2f getPosition() const { return pos; }
         Vector2f getSize() const { return size; }
-        float getSpeed() const { return speed; }
-        void setSpeed(float newSpeed) { speed = newSpeed; }
         
         Vector2f getVelocity() const { return velocity; }
         void setVelocity(Vector2f vel) { velocity = vel; }
 
         void update(float deltaTime) {
-                pos = pos + (velocity * deltaTime);
-            }
+            pos = pos + (velocity * deltaTime);
+        }
 
         void setPos(Vector2f newPos) { pos = newPos; }
-        void move(Vector2f delta) { pos = pos + delta; }
-        
         
     protected:
         SDL_Texture* tex;
         Vector2f pos;
         Vector2f size;
         Vector2f velocity;
-        float speed = 400.0f;
 };

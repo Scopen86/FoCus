@@ -21,10 +21,10 @@ void Player::hit() {
     hitSound.playSound();
 
     // No need to use getter and setter for speed, because this is inherited from Entity class
-    float tempSpeed = speed; 
-    speed = 0.0f;
-    SDL_Delay(100);
-    speed = tempSpeed;
+    Vector2f tempVel = velocity;
+    velocity = Vector2f(0, 0);
+    SDL_Delay(100); // FIX LATER UNINTENDED DELAY
+    velocity = tempVel;
 
     hp -= 1;
     if(hp < 0) hp = 0;
