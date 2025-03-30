@@ -4,6 +4,8 @@
 
 #include "Player.hpp"
 #include "Audio.hpp"
+#include "Timer.hpp"
+
 void Player::knockback() {
     srand(time(0));
     int ran = rand() % 50 + 50; // 50 -> 100

@@ -15,6 +15,7 @@
 #include "Audio.hpp"
 #include "Timer.hpp"
 
+
 int main(int argc, char* argv[]) {
     RenderWindow window;
     bool gameRunning = true;
@@ -39,9 +40,10 @@ int main(int argc, char* argv[]) {
     std::vector<Entity> enemies;
     if(enemiesFile.is_open()) {
         int x, y, sizeX, sizeY;
+        float vecX, vecY;
         std::string line;
-        while(enemiesFile >> x >> y >> sizeX >> sizeY) {
-            Entity enemy(enemyTex, Vector2f(x, y), Vector2f(sizeX, sizeY));
+        while(enemiesFile >> x >> y >> sizeX >> sizeY >> vecX >> vecY) {
+            Entity enemy(enemyTex, Vector2f(x, y), Vector2f(sizeX, sizeY), Vector2f(vecX, vecY));
             enemies.push_back(enemy);
         }
         enemiesFile.close();
@@ -63,6 +65,25 @@ int main(int argc, char* argv[]) {
             }
         }
 
+        window.clear();
+        
+        window.draw(background);
+        window.draw(player);
+        for(Entity& enemy : enemies) {
+            window.draw(enemy);
+        }
+        window.drawText("HP: " + std::to_string(player.getHp()), Vector2f(10, 10), WHITE, 24);
+        float seconds = SDL_GetTicks() / 1000.0f;
+        std::stringstream timeStream;
+        timeStream << std::fixed << std::setprecision(2) << seconds;
+        window.drawText("Time: " + timeStream.str() + "s", Vector2f(10, 40), WHITE, 24);
+        
+        window.display();
+
+        for(Entity& enemy : enemies) {
+            enemy.update(deltaTime);
+        }
+
         Logic logic;
         logic.handlePlayerMovement(player, deltaTime);
         if(logic.checkCollision(player, enemies)) {
@@ -78,21 +99,7 @@ int main(int argc, char* argv[]) {
             }
         }
         
-        window.clear();
         
-        window.draw(background);
-        window.draw(player);
-        for(Entity enemy : enemies) {
-            window.draw(enemy);
-        }
-        
-        window.drawText("HP: " + std::to_string(player.getHp()), Vector2f(10, 10), WHITE, 24);
-        float seconds = SDL_GetTicks() / 1000.0f;
-        std::stringstream timeStream;
-        timeStream << std::fixed << std::setprecision(2) << seconds;
-        window.drawText("Time: " + timeStream.str() + "s", Vector2f(10, 40), WHITE, 24);
-        
-        window.display();
     }
 
     return 0;

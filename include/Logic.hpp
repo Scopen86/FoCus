@@ -3,6 +3,7 @@
 
 #include "Entity.hpp"
 #include "Player.hpp"
+
 class Logic {
     public:
         Logic() {};

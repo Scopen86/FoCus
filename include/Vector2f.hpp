@@ -15,7 +15,11 @@ struct Vector2f
     {
         return Vector2f(x + other.x, y + other.y);
     }
-    
+
+    Vector2f operator*(float scalar) const {
+        return Vector2f(x * scalar, y * scalar);
+    }
+
     void print()
     {
         std::cout << "X: " << x << " Y: " << y << std::endl;
