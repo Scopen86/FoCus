@@ -1,12 +1,10 @@
 #pragma once
 #include <vector>
 
-#include "Enemy.hpp"
-#include "Player.hpp"
+#include "Entity.hpp"
 
 class Logic {
     public:
         Logic() {};
-        void handlePlayerMovement(Player& player, float deltaTime);
-        bool checkCollision(Player& player, std::vector<Enemy>& enemies);
+        bool checkCollision(Entity& frame, std::vector<Entity&> targets);
 };

@@ -11,10 +11,8 @@
 #include "defs.hpp"
 #include "Entity.hpp"
 #include "Logic.hpp"
-#include "Player.hpp"
 #include "Audio.hpp"
 #include "Timer.hpp"
-#include "Enemy.hpp"
 
 int main(int argc, char* argv[]) {
     RenderWindow window;
@@ -23,33 +21,46 @@ int main(int argc, char* argv[]) {
     Timer gameTimer;
     gameTimer.start();
     
-    Audio backgroundMusic;
-    backgroundMusic.loadSound("./res/Chronos(cut).wav");
-    backgroundMusic.playSound();
-    Audio gameOverSound;
-    gameOverSound.loadSound("./res/gameOver.wav");
+    // Audio backgroundMusic;
+    // backgroundMusic.loadSound("./res/Chronos(cut).wav");
+    // backgroundMusic.playSound();
+    // Audio gameOverSound;
+    // gameOverSound.loadSound("./res/gameOver.wav");
    
-    SDL_Texture* backgroundTex = window.loadTexture("./res/background.jpg");
-    SDL_Texture* playerTex = window.loadTexture("./res/player.png");
-    SDL_Texture* enemyTex = window.loadTexture("./res/squareEnemy.png");
+    SDL_Texture* backgroundTex = window.loadTexture("./res/background.png");
+    SDL_Texture* triangleFrameTex = window.loadTexture("./res/triangleFrame.png");
+    SDL_Texture* triangleTex = window.loadTexture("./res/triangle.png");
 
-    Entity background(backgroundTex, Vector2f(0, 0), Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT));
-    Player player(playerTex, Vector2f(30, SCREEN_HEIGHT / 2), 3);
+    // Entity background(backgroundTex, Vector2f(0, 0), Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT));
+    Entity triangleFrame(triangleFrameTex, Vector2f(200, 600), Vector2f(32, 32));
+    Entity triangle(triangleTex, Vector2f(200, 10), Vector2f(28, 28), 100.0f);
 
-    std::ifstream enemiesFile("./res/enemiesPos.txt");
-    std::vector<Enemy> enemies;
-    if(enemiesFile.is_open()) {
-        int x, y, sizeX, sizeY;
-        float vecX, vecY, timing;
-        std::string line;
-        while(enemiesFile >> x >> y >> sizeX >> sizeY >> vecX >> vecY >> timing) {
-            Enemy enemy(enemyTex, Vector2f(x, y), Vector2f(sizeX, sizeY), Vector2f(vecX, vecY), timing);
-            enemies.push_back(enemy);
+    std::ifstream targetTimings("./res/frameTiming.txt");
+    std::vector<Entity> targets;
+    if(targetTimings.is_open()) {
+        int type;
+        float timing;
+        while(targetTimings >> type >> timing) {
+            switch(type) {
+                case 0:
+                    break;
+                case 1:
+                    break;
+                case 2: {
+                    Entity target(triangleTex, Vector2f(200, 10), Vector2f(28, 28), timing);
+                    targets.push_back(target);
+                    break;
+                }
+                case 3:
+                    break;
+                default:
+                    break;
+            }  
         }
-        enemiesFile.close();
+        targetTimings.close();
 
     } else {
-        std::cout << "Failed to open enemies file." << std::endl;
+        std::cout << "Failed to open ./res/frameTiming.txt file." << std::endl;
         return 1;
     }
     
@@ -68,33 +79,36 @@ int main(int argc, char* argv[]) {
 
         window.clear();
         
-        window.draw(background);
-        window.draw(player);
-        for(Enemy& enemy : enemies) {
-            if(currentTime >= enemy.getTiming()) {
-                window.draw(enemy);
-                enemy.update(deltaTime);
-            }
+        // window.draw(background);
+        window.draw(triangleFrame);
+        window.draw(triangle);
+
+        triangle.update(deltaTime);
+        
+        for(Entity& target : targets) {
+            window.draw(target);
+            target.update(deltaTime);
         }
-        window.drawText("HP: " + std::to_string(player.getHp()), Vector2f(10, 10), WHITE, 24);
-        window.drawText("Time: " + std::to_string(currentTime) + "s", Vector2f(10, 40), WHITE, 24);
+        
+        // window.drawText("HP: " + std::to_string(player.getHp()), Vector2f(10, 10), WHITE, 24);
+        window.drawText("Time: " + std::to_string(currentTime) + "s", Vector2f(10, 40), {255, 255, 255, 255}, 24);
         
         window.display();
 
-        Logic logic;
-        logic.handlePlayerMovement(player, deltaTime);
-        if(logic.checkCollision(player, enemies)) {
-            player.hit();
-            window.shake(-1);
+        // Logic logic;
+        // logic.handlePlayerMovement(player, deltaTime);
+        // if(logic.checkCollision(player, enemies)) {
+        //     player.hit();
+        //     window.shake(-1);
 
-            std::cout << "Player HP: " << player.getHp() << std::endl;
-            if(player.getHp() <= 0) {
-                gameOverSound.playSound();
-                std::cout << "Game Over!" << std::endl;
-                SDL_Delay(2000); 
-                gameRunning = false;
-            }
-        }
+        //     std::cout << "Player HP: " << player.getHp() << std::endl;
+        //     if(player.getHp() <= 0) {
+        //         gameOverSound.playSound();
+        //         std::cout << "Game Over!" << std::endl;
+        //         SDL_Delay(2000); 
+        //         gameRunning = false;
+        //     }
+        // }
     }
 
     return 0;
