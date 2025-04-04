@@ -2,6 +2,10 @@
 #include "defs.hpp"
 #include "RenderWindow.hpp"
 #include "Vector2f.hpp"
+#include <iostream>
+
+Logic::Logic() : score(0.0), frame0Active(false), frame1Active(false), 
+                frame2Active(false), frame3Active(false) {}
 
 bool Logic::checkCollision(Entity& frame, Entity& target) {
     Vector2f framePos = frame.getPosition();
@@ -31,5 +35,58 @@ void Logic::calculateScore(Entity& frame, Entity& target) {
         std::cout << "Total score: " << score << std::endl;
     } else {
         std::cout << "Too far for points" << std::endl;
+    }
+}
+
+void Logic::handleKeyboardInput(Entity& frame0, Entity& frame1, Entity& frame2, Entity& frame3, std::vector<Entity>& targets, float currentTime) {
+    const Uint8* keyState = SDL_GetKeyboardState(NULL);
+
+    // Check all keys every frame
+    if(keyState[SDL_SCANCODE_D]) {
+        frame0Active = true;
+        for(Entity& target : targets) {
+            if(currentTime >= target.getTiming()) {
+                if(checkCollision(frame0, target)) {
+                    calculateScore(frame0, target);
+                    target.moveOutOfScreen();
+                }
+            }
+        }
+    }
+
+    if(keyState[SDL_SCANCODE_F]) {
+        frame1Active = true;
+        for(Entity& target : targets) {
+            if(currentTime >= target.getTiming()) {
+                if(checkCollision(frame1, target)) {
+                    calculateScore(frame1, target);
+                    target.moveOutOfScreen();
+                }
+            }
+        }
+    }
+
+    if(keyState[SDL_SCANCODE_J]) {
+        frame2Active = true;
+        for(Entity& target : targets) {
+            if(currentTime >= target.getTiming()) {
+                if(checkCollision(frame2, target)) {
+                    calculateScore(frame2, target);
+                    target.moveOutOfScreen();
+                }
+            }
+        }
+    }
+
+    if(keyState[SDL_SCANCODE_K]) {
+        frame3Active = true;
+        for(Entity& target : targets) {
+            if(currentTime >= target.getTiming()) {
+                if(checkCollision(frame3, target)) {
+                    calculateScore(frame3, target);
+                    target.moveOutOfScreen();
+                }
+            }
+        }
     }
 }

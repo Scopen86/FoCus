@@ -21,11 +21,9 @@ int main(int argc, char* argv[]) {
     Timer gameTimer;
     gameTimer.start();
     
-    // Audio backgroundMusic;
-    // backgroundMusic.loadSound("./res/Chronos(cut).wav");
-    // backgroundMusic.playSound();
-    // Audio gameOverSound;
-    // gameOverSound.loadSound("./res/gameOver.wav");
+    Audio backgroundMusic;
+    backgroundMusic.loadSound("./res/NH22_Isolation_Limbo_Remix.wav");
+    backgroundMusic.playSound();
    
     // SDL_Texture* backgroundTex = window.loadTexture("./res/background.png");
 
@@ -55,11 +53,6 @@ int main(int argc, char* argv[]) {
     SDL_Texture* target3Tex = window.loadTexture("./res/target3.png");
 
     // Entity background(backgroundTex, Vector2f(0, 0), Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT));
-    
-    bool frame0Active = false;
-    bool frame1Active = false;
-    bool frame2Active = false;
-    bool frame3Active = false;
 
     std::ifstream targetTimings("./res/targetTimings.txt");
     std::vector<Entity> targets;
@@ -109,54 +102,22 @@ int main(int argc, char* argv[]) {
         float deltaTime = gameTimer.getDeltaTime();
         float currentTime = gameTimer.getTime();
         
+        // Process events for quit and key up events only
         while(SDL_PollEvent(&event)) {
             if(event.type == SDL_QUIT) {
                 gameRunning = false;
             }
-            else if(event.type == SDL_KEYDOWN) {
-                Entity* frameToCheck = nullptr;
-                switch(event.key.keysym.sym) {
-                    case SDLK_d: {
-                        frameToCheck = &frame0;
-                        frame0Active = true;
-                        break;
-                    }
-                    case SDLK_f: {
-                        frameToCheck = &frame1;
-                        frame1Active = true;
-                        break;
-                    }
-                    case SDLK_j: {
-                        frameToCheck = &frame2;
-                        frame2Active = true;
-                        break;
-                    }
-                    case SDLK_k: {
-                        frameToCheck = &frame3;
-                        frame3Active = true;
-                        break;
-                    }
-                }
-                
-                if(frameToCheck) {
-                    for(Entity& target : targets) {
-                        if(currentTime >= target.getTiming()) {
-                            if(logic.checkCollision(*frameToCheck, target)) {
-                                logic.calculateScore(*frameToCheck, target);
-                            }
-                        }
-                    }
-                }
-            }
             else if(event.type == SDL_KEYUP) {
                 switch(event.key.keysym.sym) {
-                    case SDLK_d: frame0Active = false; break;
-                    case SDLK_f: frame1Active = false; break;
-                    case SDLK_j: frame2Active = false; break;
-                    case SDLK_k: frame3Active = false; break;
+                    case SDLK_d: logic.setFrame0Active(false); break;
+                    case SDLK_f: logic.setFrame1Active(false); break;
+                    case SDLK_j: logic.setFrame2Active(false); break;
+                    case SDLK_k: logic.setFrame3Active(false); break;
                 }
             }
         }
+
+        logic.handleKeyboardInput(frame0, frame1, frame2, frame3, targets, currentTime);
 
         window.clear();
         window.draw(frame0);
@@ -164,26 +125,26 @@ int main(int argc, char* argv[]) {
         window.draw(frame2);
         window.draw(frame3);
 
-        if(frame0Active) window.draw(frame0check);
-        if(frame1Active) window.draw(frame1check);
-        if(frame2Active) window.draw(frame2check);
-        if(frame3Active) window.draw(frame3check);
+        if(logic.isFrame0Active()) window.draw(frame0check);
+        if(logic.isFrame1Active()) window.draw(frame1check);
+        if(logic.isFrame2Active()) window.draw(frame2check);
+        if(logic.isFrame3Active()) window.draw(frame3check);
 
         for(Entity& target : targets) {
-            if(currentTime >= target.getTiming()) {
+            if(currentTime >= target.getTiming() && 
+               target.getPosition().y >= 0 && 
+               target.getPosition().y < SCREEN_HEIGHT) {
                 window.draw(target);
                 target.update(deltaTime);
             }
         }
 
-        
-        // window.drawText("HP: " + std::to_string(player.getHp()), Vector2f(10, 10), WHITE, 24);
-        window.drawText("Time: " + std::to_string(currentTime) + "s", Vector2f(10, 40), {255, 255, 255, 255}, 24);
+        std::stringstream ss;
+        ss << std::fixed << std::setprecision(2) << (currentTime / 209 * 100.0) << "%";
+        window.drawText(ss.str(), Vector2f(SCREEN_WIDTH / 2 - 50, 40), WHITE, 24);
+        window.drawText("Score: " + std::to_string(static_cast<int>(logic.getScore())), Vector2f(SCREEN_WIDTH / 2 - 100, 80), WHITE, 24);
         
         window.display();
-
-        
-        
     }
 
     return 0;

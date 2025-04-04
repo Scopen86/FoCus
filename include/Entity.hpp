@@ -11,7 +11,10 @@ class Entity {
         :tex(p_tex), pos(p_pos), size(p_size), timing(p_timing) {};
         Entity(SDL_Texture* p_tex, Vector2f p_pos, float p_timing)
         :tex(p_tex), pos(p_pos), size(DEFAULT_SIZE), timing(p_timing) {};
+        Entity(SDL_Texture* p_tex, Vector2f p_pos)
+        :tex(p_tex), pos(p_pos), size(DEFAULT_SIZE), timing(0.0f) {};
 
+        // TEXTURES ARE SHARED, DO NOT DELETE THEM HERE
         // ~Entity() {
         //     SDL_DestroyTexture(tex);
         // };
@@ -21,6 +24,8 @@ class Entity {
         Vector2f getSize() const { return size; }
         float getVelocity() const { return fallVel; }
         float getTiming() const { return timing; }
+
+        void moveOutOfScreen() { pos.y = -100; }
 
         void update(float deltaTime) {
             pos.y = pos.y + (fallVel * deltaTime);
