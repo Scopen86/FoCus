@@ -4,8 +4,17 @@
 #include "Vector2f.hpp"
 #include <iostream>
 
-Logic::Logic() : score(0.0), frame0Active(false), frame1Active(false), 
-                frame2Active(false), frame3Active(false) {}
+Logic::Logic() 
+    :score(0.0) {
+    frameActive = std::vector<bool>(4, false);
+    
+    keyScanCodes = {
+        SDL_SCANCODE_D,
+        SDL_SCANCODE_F,
+        SDL_SCANCODE_J,
+        SDL_SCANCODE_K
+    };
+}
 
 bool Logic::checkCollision(Entity& frame, Entity& target) {
     Vector2f framePos = frame.getPosition();
@@ -38,55 +47,39 @@ void Logic::calculateScore(Entity& frame, Entity& target) {
     }
 }
 
-void Logic::handleKeyboardInput(Entity& frame0, Entity& frame1, Entity& frame2, Entity& frame3, std::vector<Entity>& targets, float currentTime) {
+void Logic::handleMovement(std::vector<Entity>& frames, std::vector<Entity>& targets, float currentTime) {
     const Uint8* keyState = SDL_GetKeyboardState(NULL);
-
-    // Check all keys every frame
-    if(keyState[SDL_SCANCODE_D]) {
-        frame0Active = true;
-        for(Entity& target : targets) {
-            if(currentTime >= target.getTiming()) {
-                if(checkCollision(frame0, target)) {
-                    calculateScore(frame0, target);
-                    target.moveOutOfScreen();
+    
+    for(int i = 0; i < 4; i++) {
+        if(keyState[keyScanCodes[i]]) {
+            frameActive[i] = true;
+            
+            for(Entity& target : targets) {
+                if(currentTime >= target.getTiming() && target.getPosition().y >= 0) {
+                    if(checkCollision(frames[i], target)) {
+                        calculateScore(frames[i], target);
+                        target.moveOutOfScreen();
+                    }
                 }
             }
         }
     }
+}
 
-    if(keyState[SDL_SCANCODE_F]) {
-        frame1Active = true;
-        for(Entity& target : targets) {
-            if(currentTime >= target.getTiming()) {
-                if(checkCollision(frame1, target)) {
-                    calculateScore(frame1, target);
-                    target.moveOutOfScreen();
-                }
-            }
-        }
+void Logic::processKeyEvent(const SDL_Event& event) {
+    if(event.type == SDL_KEYUP) {
+        SDL_Keycode keycode = event.key.keysym.sym;
+        
+        if(keycode == SDLK_d) frameActive[0] = false;
+        else if(keycode == SDLK_f) frameActive[1] = false; 
+        else if(keycode == SDLK_j) frameActive[2] = false;
+        else if(keycode == SDLK_k) frameActive[3] = false;
     }
+}
 
-    if(keyState[SDL_SCANCODE_J]) {
-        frame2Active = true;
-        for(Entity& target : targets) {
-            if(currentTime >= target.getTiming()) {
-                if(checkCollision(frame2, target)) {
-                    calculateScore(frame2, target);
-                    target.moveOutOfScreen();
-                }
-            }
-        }
+bool Logic::isFrameActive(int frameIndex) const {
+    if(frameIndex >= 0 && frameIndex < static_cast<int>(frameActive.size())) {
+        return frameActive[frameIndex];
     }
-
-    if(keyState[SDL_SCANCODE_K]) {
-        frame3Active = true;
-        for(Entity& target : targets) {
-            if(currentTime >= target.getTiming()) {
-                if(checkCollision(frame3, target)) {
-                    calculateScore(frame3, target);
-                    target.moveOutOfScreen();
-                }
-            }
-        }
-    }
+    return false;
 }
