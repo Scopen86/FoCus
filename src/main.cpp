@@ -22,28 +22,28 @@ int main(int argc, char* argv[]) {
     gameTimer.start();
     
     Audio backgroundMusic;
-    backgroundMusic.loadSound("./res/NH22_Isolation_Limbo_Remix.wav");
+    backgroundMusic.loadSound("./res/level/NH22_Isolation_Limbo_Remix.wav");
     backgroundMusic.playSound();
    
     std::vector<SDL_Texture*> frameTex = {
-        window.loadTexture("./res/frame0.png"),
-        window.loadTexture("./res/frame1.png"),
-        window.loadTexture("./res/frame2.png"),
-        window.loadTexture("./res/frame3.png")
+        window.loadTexture("./res/textures/frame0.png"),
+        window.loadTexture("./res/textures/frame1.png"),
+        window.loadTexture("./res/textures/frame2.png"),
+        window.loadTexture("./res/textures/frame3.png")
     };
     
     std::vector<SDL_Texture*> frameCheckTex = {
-        window.loadTexture("./res/frame0check.png"),
-        window.loadTexture("./res/frame1check.png"),
-        window.loadTexture("./res/frame2check.png"),
-        window.loadTexture("./res/frame3check.png")
+        window.loadTexture("./res/textures/frame0check.png"),
+        window.loadTexture("./res/textures/frame1check.png"),
+        window.loadTexture("./res/textures/frame2check.png"),
+        window.loadTexture("./res/textures/frame3check.png")
     };
     
     std::vector<SDL_Texture*> targetTex = {
-        window.loadTexture("./res/target0.png"),
-        window.loadTexture("./res/target1.png"),
-        window.loadTexture("./res/target2.png"),
-        window.loadTexture("./res/target3.png")
+        window.loadTexture("./res/textures/target0.png"),
+        window.loadTexture("./res/textures/target1.png"),
+        window.loadTexture("./res/textures/target2.png"),
+        window.loadTexture("./res/textures/target3.png")
     };
     
     std::vector<Entity> frames;
@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
     }
 
     std::vector<Entity> targets;
-    std::ifstream targetTimings("./res/targetTimings.txt");
+    std::ifstream targetTimings("./res/level/targetTimings.txt");
     
     if(targetTimings.is_open()) {
         int type;
@@ -71,7 +71,7 @@ int main(int argc, char* argv[]) {
         }
         targetTimings.close();
     } else {
-        std::cout << "Failed to open ./res/targetTimings.txt file." << std::endl;
+        std::cout << "Failed to open ./res/level/targetTimings.txt file." << std::endl;
         return 1;
     }
     
@@ -114,8 +114,8 @@ int main(int argc, char* argv[]) {
         }
 
         std::stringstream ss;
-        ss << std::fixed << std::setprecision(2) << (currentTime / 209 * 100.0) << "%";
-        window.drawText(ss.str(), Vector2f(SCREEN_WIDTH / 2 - 40, 40), WHITE, 24);
+        ss << std::fixed << std::setprecision(2) << (currentTime / 190 * 100.0) << "%";
+        window.drawText(ss.str(), Vector2f(SCREEN_WIDTH / 2 - 30, 40), WHITE, 24);
         window.drawText("Score: " + std::to_string(static_cast<int>(logic.getScore())), Vector2f(SCREEN_WIDTH / 2 - 100, 80), WHITE, 24);
         
         window.display();
