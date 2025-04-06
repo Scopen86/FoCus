@@ -10,7 +10,7 @@ class Logic {
         bool checkCollision(Entity& frame, Entity& target);
         void calculateScore(Entity& frame, Entity& target);
         
-        void handleMovement(std::vector<Entity>& frames, std::vector<Entity>& targets, float currentTime);
+        void handleInput(std::vector<Entity>& frames, std::vector<Entity>& targets, float currentTime);
         void processKeyEvent(const SDL_Event& event);
         
         bool isFrameActive(int frameIndex) const;

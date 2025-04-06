@@ -47,7 +47,7 @@ void Logic::calculateScore(Entity& frame, Entity& target) {
     }
 }
 
-void Logic::handleMovement(std::vector<Entity>& frames, std::vector<Entity>& targets, float currentTime) {
+void Logic::handleInput(std::vector<Entity>& frames, std::vector<Entity>& targets, float currentTime) {
     const Uint8* keyState = SDL_GetKeyboardState(NULL);
     
     for(int i = 0; i < 4; i++) {
