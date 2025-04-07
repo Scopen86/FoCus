@@ -5,7 +5,7 @@
 #include <iostream>
 
 Logic::Logic() 
-    :score(0.0) {
+    :score(0.0), combo(0), lastHitGrade(-1), perfectCount(0), greatCount(0), goodCount(0), okayCount(0), missCount(0) {
     frameActive = std::vector<bool>(4, false);
     
     keyScanCodes = {
@@ -37,13 +37,43 @@ void Logic::calculateScore(Entity& frame, Entity& target) {
     Vector2f frameCenter = frame.getPosition() + frame.getSize() / 2.0f;
     Vector2f targetCenter = target.getPosition() + target.getSize() / 2.0f;
     float distance = frameCenter.getDistance(targetCenter);
-
-    if(distance < 50.0f) {
-        score += 100.0f - (distance / 50.0f) * 100.0f;
-        std::cout << "Score increased by: " << (100.0f - (distance / 50.0f) * 100.0f) << std::endl;
-        std::cout << "Total score: " << score << std::endl;
+    
+    if (distance < 10.0f) {
+        lastHitGrade = 4;
+        perfectCount++;
+        score += 100.0f * (1.0f + combo * 0.01f);
+        incrementCombo();
+    } else if (distance < 25.0f) {
+        lastHitGrade = 3;
+        greatCount++;
+        score += 75.0f * (1.0f + combo * 0.008f);
+        incrementCombo();
+    } else if (distance < 35.0f) {
+        lastHitGrade = 2;
+        goodCount++;
+        score += 50.0f * (1.0f + combo * 0.005f);
+        incrementCombo();
+    } else if (distance < 50.0f) {
+        lastHitGrade = 1;
+        okayCount++;
+        score += 25.0f;
+        incrementCombo();
     } else {
-        std::cout << "Too far for points" << std::endl;
+        lastHitGrade = 0;
+        missCount++;
+        resetCombo();
+    }
+}
+
+const std::string Logic::getGradeString() const {
+    switch (lastHitGrade) {
+        case 4: return "PERFECT";
+        case 3: return "GREAT";
+        case 2: return "GOOD";
+        case 1: return "OKAY";
+        case 0: return "MISS";
+        case -1: return "";
+        default: return "NONE";
     }
 }
 

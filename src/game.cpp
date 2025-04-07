@@ -118,6 +118,22 @@ void Game::render(float currentTime) {
     window.drawText("Score: " + std::to_string(score), 
                    Vector2f(SCREEN_WIDTH / 2 - 100, 80), WHITE, 24);
     
+    if (logic.getCombo() > 1) {
+        window.drawText("Combo: " + std::to_string(logic.getCombo()), 
+                       Vector2f(SCREEN_WIDTH / 2 - 60, 120), WHITE, 24);
+    }
+    
+    SDL_Color gradeColor = WHITE;
+    switch (logic.getLastHitGrade()) {
+        case 4: gradeColor = {255, 215, 0, 255}; break;  // Gold
+        case 3: gradeColor = {0, 255, 0, 255};   break;  // Green
+        case 2: gradeColor = {0, 191, 255, 255}; break;  // Blue
+        case 1: gradeColor = {255, 165, 0, 255}; break;  // Orange
+        case 0: gradeColor = {255, 0, 0, 255};   break;  // Red
+    }
+    
+    window.drawText(logic.getGradeString(), Vector2f(SCREEN_WIDTH / 2 - 50, 160), gradeColor, 30);
+    
     window.display();
 }
 
