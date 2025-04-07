@@ -21,6 +21,7 @@ public:
     int getScore() const { return score; }
     void reset();
     bool didUserQuit() const { return userQuit; }
+    int getMaxCombo() const { return logic.getMaxCombo(); }
 private:
     void handleEvents();
     void update(float deltaTime, float currentTime);

@@ -17,13 +17,15 @@ public:
     void isHovering(Entity& button);
     void setState(int p_state) { state = p_state; }
     void setFinalScore(float score) { finalScore = score; }
+    void setMaxCombo(int combo) { finalMaxCombo = combo; }
     
 private:
     void loadEntity();
     
     int state;
     RenderWindow& window;
-    float finalScore;
+    float finalScore = 0.0f;
+    int finalMaxCombo = 0;
     
     Entity title;
     Entity playButton;

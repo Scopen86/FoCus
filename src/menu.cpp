@@ -1,5 +1,6 @@
 #include <iostream>
 #include <SDL.h>
+#include <fstream>
 
 #include "Menu.hpp"
 #include "defs.hpp"
@@ -105,13 +106,49 @@ void Menu::showGameOver() {
     bool quit = false;
     SDL_Event event;
     
+    bool isNewHighScore = false;
+    int highScore = 0;
+    
+    std::ifstream readFile("./res/level/userScore.txt");
+    if (readFile.is_open()) {
+        if(!(readFile >> highScore)) {
+            highScore = 0;
+        }
+        readFile.close();
+    }
+    
+    int currentScore = finalScore;
+    if (currentScore > highScore) {
+        isNewHighScore = true;
+        highScore = currentScore;
+        
+        std::ofstream writeFile("./res/level/userScore.txt");
+        if (writeFile.is_open()) {
+            writeFile << currentScore;
+            writeFile.close();
+        } else {
+            std::cout << "Error: Could not write to high score file" << std::endl;
+        }
+    }
+    
     while (!quit) {
         window.clear();
         
         window.draw(gameOver);
         
-        window.drawText("Level Completed!", Vector2f(SCREEN_WIDTH / 2 - 100, 40), WHITE, 300);
-        window.drawText("Score: " + std::to_string(static_cast<int>(finalScore)), Vector2f(SCREEN_WIDTH / 2 - 100, 80), WHITE, 150);
+        window.drawText("Level Completed!", Vector2f(SCREEN_WIDTH / 2 - 100, 40), WHITE, 32);
+        window.drawText("Score: " + std::to_string(currentScore), 
+                        Vector2f(SCREEN_WIDTH / 2 - 100, 90), WHITE, 28);
+        window.drawText("Max Combo: " + std::to_string(finalMaxCombo), 
+                        Vector2f(SCREEN_WIDTH / 2 - 100, 130), WHITE, 24);
+        
+        window.drawText("High Score: " + std::to_string(highScore), 
+                       Vector2f(SCREEN_WIDTH / 2 - 100, 170), WHITE, 24);
+        
+        if (isNewHighScore) {
+            window.drawText("New High Score!", 
+                           Vector2f(SCREEN_WIDTH / 2 - 100, 210), {255, 215, 0, 255}, 32); // Gold color
+        }
         
         window.draw(restartButton);
         window.draw(homeButton);

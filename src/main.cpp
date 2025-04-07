@@ -29,6 +29,7 @@ int main(int argc, char* argv[]) {
                         running = false;
                     } else {
                         menu.setFinalScore(game.getScore());
+                        menu.setMaxCombo(game.getMaxCombo());
                         menu.setState(5);
                     }
                 }
