@@ -12,4 +12,5 @@ class Audio {
         void stopSound();
     private:
         Mix_Chunk* soundChunk = nullptr;
+        int defaultVolume;
 };

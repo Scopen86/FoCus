@@ -33,4 +33,5 @@ private:
     Entity gameOver;
 
     Entity restartButton;
+    Entity homeButton;
 };

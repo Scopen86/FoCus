@@ -4,6 +4,8 @@ Audio::Audio() {
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0) {
         std::cout << "Failed to initialize SDL_mixer: " << Mix_GetError() << std::endl;
     }
+    
+    defaultVolume = MIX_MAX_VOLUME / 4;
 }
 
 Audio::~Audio() {
@@ -17,6 +19,8 @@ bool Audio::loadSound(const char* path) {
         std::cout << "Failed to load sound: " << Mix_GetError() << std::endl;
         return false;
     }
+    
+    Mix_VolumeChunk(soundChunk, defaultVolume);
     return true;
 }
 
