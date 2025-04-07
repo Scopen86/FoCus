@@ -8,7 +8,7 @@
 #include "defs.hpp"
 
 Game::Game() 
-    :gameRunning(false) {};
+    :gameRunning(false), userQuit(false) {};
 
 Game::~Game() {
     for(SDL_Texture* tex : frameTex) {
@@ -67,6 +67,7 @@ void Game::handleEvents() {
     while(SDL_PollEvent(&event)) {
         if(event.type == SDL_QUIT) {
             gameRunning = false;
+            userQuit = true;
         }
         else {
             logic.processKeyEvent(event);

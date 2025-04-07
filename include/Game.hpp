@@ -20,6 +20,7 @@ public:
     RenderWindow& getWindow() { return window; }
     int getScore() const { return score; }
     void reset();
+    bool didUserQuit() const { return userQuit; }
 private:
     void handleEvents();
     void update(float deltaTime, float currentTime);
@@ -44,4 +45,5 @@ private:
     
     SDL_Event event;
     float percentage;
+    bool userQuit = false;
 };

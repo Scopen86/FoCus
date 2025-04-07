@@ -25,8 +25,12 @@ int main(int argc, char* argv[]) {
             case 4:
                 game.reset();
                 if(!game.run()) {
-                    menu.setFinalScore(game.getScore());
-                    menu.setState(5);
+                    if(game.didUserQuit()) {
+                        running = false;
+                    } else {
+                        menu.setFinalScore(game.getScore());
+                        menu.setState(5);
+                    }
                 }
                 break;
             case 5:
