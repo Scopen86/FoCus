@@ -20,10 +20,7 @@ int main(int argc, char* argv[]) {
                 menu.showMenu();
                 break;
             case 2:
-                menu.showInstructions();
-                break;
-            case 3:
-                menu.showCredits();
+                menu.showInfo();
                 break;
             case 4:
                 game.run();

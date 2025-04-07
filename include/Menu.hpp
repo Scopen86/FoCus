@@ -10,8 +10,7 @@ public:
     ~Menu();
     
     void showMenu();
-    void showInstructions();
-    void showCredits();
+    void showInfo();
     void showGameOver();
     
     int getState() const { return state; }
@@ -26,10 +25,10 @@ private:
     
     Entity title;
     Entity playButton;
-    Entity instructionsButton;
-    Entity creditsButton;
-    Entity restartButton;
-    Entity instructions;
-    Entity credits;
+    Entity infoButton;
+
+    Entity info;
     Entity gameOver;
+
+    Entity restartButton;
 };
