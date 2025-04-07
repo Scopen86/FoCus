@@ -55,10 +55,11 @@ void Logic::handleInput(std::vector<Entity>& frames, std::vector<Entity>& target
             frameActive[i] = true;
             
             for(Entity& target : targets) {
-                if(currentTime >= target.getTiming() && target.getPosition().y >= 0) {
+                if(currentTime >= target.getTiming() && target.getPosition().y >= 0 && target.getPosition().y < SCREEN_HEIGHT) {
                     if(checkCollision(frames[i], target)) {
                         calculateScore(frames[i], target);
                         target.moveOutOfScreen();
+                        break; // Only check one time when the key is pressed
                     }
                 }
             }
