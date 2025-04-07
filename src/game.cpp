@@ -39,8 +39,8 @@ bool Game::init() {
     
     for (int i = 0; i < 4; i++) {
         float xPos = 40 + (i * 100);
-        frames.push_back(Entity(frameTex[i], Vector2f(xPos, DEFAULT_Y_POS)));
-        frameChecks.push_back(Entity(frameCheckTex[i], Vector2f(xPos, DEFAULT_Y_POS)));
+        frames.push_back(Entity(frameTex[i], Vector2f(xPos, FRAME_Y_POS)));
+        frameChecks.push_back(Entity(frameCheckTex[i], Vector2f(xPos, FRAME_Y_POS)));
     }
     
     return true;
@@ -132,7 +132,7 @@ void Game::render(float currentTime) {
         window.drawText(logic.getGradeString() + " X" + std::to_string(logic.getCombo()), 
                         Vector2f(SCREEN_WIDTH / 2 - 50, 120), gradeColor, 30);
     }
-    else {
+    else if(logic.getLastHitGrade() != -1) {
         window.drawText(logic.getGradeString(), Vector2f(SCREEN_WIDTH / 2 - 50, 120), gradeColor, 30);
     }
     
@@ -167,7 +167,7 @@ bool Game::loadResources() {
 }
 
 bool Game::loadTargets() {
-    const float delta = 1.5f; //The time it takes for the target to fall to the frames
+    const float delta = DEFAULT_FALL_VELOCITY / FRAME_Y_POS; //The time it takes for the target to fall to the frames
     std::ifstream targetTimings("./res/level/targetTimings.txt");
     
     if(targetTimings.is_open()) {
