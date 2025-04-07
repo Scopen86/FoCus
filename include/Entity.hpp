@@ -13,6 +13,10 @@ class Entity {
         :tex(p_tex), pos(p_pos), size(DEFAULT_SIZE), timing(p_timing) {};
         Entity(SDL_Texture* p_tex, Vector2f p_pos)
         :tex(p_tex), pos(p_pos), size(DEFAULT_SIZE), timing(0.0f) {};
+        Entity(SDL_Texture* p_tex, Vector2f p_pos, Vector2f p_size)
+        :tex(p_tex), pos(p_pos), size(p_size), timing(0.0f) {};
+        Entity()
+        :tex(nullptr), pos(Vector2f(0, 0)), size(DEFAULT_SIZE), timing(0.0f) {};
 
         // TEXTURES ARE SHARED, DO NOT DELETE THEM HERE
         // ~Entity() {

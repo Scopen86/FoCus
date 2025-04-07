@@ -15,6 +15,9 @@ public:
     
     bool init();
     void run();
+
+    void quit() { gameRunning = false; }
+    RenderWindow& getWindow() { return window; }
     
 private:
     void handleEvents();

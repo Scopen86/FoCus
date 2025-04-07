@@ -13,6 +13,7 @@ public:
     float getDeltaTime() const { return mDeltaTime; }
     
 private:
+    Uint32 mStartTime;
     Uint32 mLastTime;
     float mDeltaTime;
     bool mStarted;

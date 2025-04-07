@@ -12,7 +12,7 @@ RenderWindow::RenderWindow() {
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
     // Load font here so that it doesn't need to be loaded every time drawText is called
-    font = TTF_OpenFont("./res/font.ttf", 24);
+    font = TTF_OpenFont("./res/LilitaOne-Regular.ttf", 24);
     if (!font) {
         std::cout << "Failed to load font! Error: " << TTF_GetError() << std::endl;
     }

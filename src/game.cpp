@@ -7,7 +7,8 @@
 #include "Game.hpp"
 #include "defs.hpp"
 
-Game::Game() : gameRunning(false) {}
+Game::Game() 
+    :gameRunning(false) {};
 
 Game::~Game() {
     for(SDL_Texture* tex : frameTex) {
@@ -25,7 +26,6 @@ Game::~Game() {
 
 bool Game::init() {
     gameRunning = true;
-    gameTimer.start();
     
     if (!loadResources()) {
         std::cout << "Failed to load resources. Stopping" << std::endl;
@@ -47,6 +47,7 @@ bool Game::init() {
 }
 
 void Game::run() {
+    gameTimer.start();
     backgroundMusic.playSound();
 
     while(gameRunning) {
@@ -112,24 +113,24 @@ void Game::render(float currentTime) {
 
 bool Game::loadResources() {
     frameTex = {
-        window.loadTexture("./res/textures/frame0.png"),
-        window.loadTexture("./res/textures/frame1.png"),
-        window.loadTexture("./res/textures/frame2.png"),
-        window.loadTexture("./res/textures/frame3.png")
+        window.loadTexture("./res/textures/game/frame0.png"),
+        window.loadTexture("./res/textures/game/frame1.png"),
+        window.loadTexture("./res/textures/game/frame2.png"),
+        window.loadTexture("./res/textures/game/frame3.png")
     };
     
     frameCheckTex = {
-        window.loadTexture("./res/textures/frame0check.png"),
-        window.loadTexture("./res/textures/frame1check.png"),
-        window.loadTexture("./res/textures/frame2check.png"),
-        window.loadTexture("./res/textures/frame3check.png")
+        window.loadTexture("./res/textures/game/frame0check.png"),
+        window.loadTexture("./res/textures/game/frame1check.png"),
+        window.loadTexture("./res/textures/game/frame2check.png"),
+        window.loadTexture("./res/textures/game/frame3check.png")
     };
     
     targetTex = {
-        window.loadTexture("./res/textures/target0.png"),
-        window.loadTexture("./res/textures/target1.png"),
-        window.loadTexture("./res/textures/target2.png"),
-        window.loadTexture("./res/textures/target3.png")
+        window.loadTexture("./res/textures/game/target0.png"),
+        window.loadTexture("./res/textures/game/target1.png"),
+        window.loadTexture("./res/textures/game/target2.png"),
+        window.loadTexture("./res/textures/game/target3.png")
     };
     
     backgroundMusic.loadSound("./res/level/NH22_Isolation_Limbo_Remix.wav");
@@ -138,6 +139,7 @@ bool Game::loadResources() {
 }
 
 bool Game::loadTargets() {
+    const float delta = 1.5f; //The time it takes for the target to fall to the frames
     std::ifstream targetTimings("./res/level/targetTimings.txt");
     
     if(targetTimings.is_open()) {
@@ -146,7 +148,7 @@ bool Game::loadTargets() {
         while(targetTimings >> type >> timing) {
             if(type >= 0 && type < 4) {
                 float xPos = 40 + (type * 100);
-                targets.push_back(Entity(targetTex[type], Vector2f(xPos, 0), timing));
+                targets.push_back(Entity(targetTex[type], Vector2f(xPos, 0), timing - delta));
             } else {
                 std::cout << "Invalid target type: " << type << std::endl;
             }
