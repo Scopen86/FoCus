@@ -16,12 +16,14 @@ public:
     int getState() const { return state; }
     void isHovering(Entity& button);
     void setState(int p_state) { state = p_state; }
+    void setFinalScore(float score) { finalScore = score; }
     
 private:
     void loadEntity();
     
     int state;
     RenderWindow& window;
+    float finalScore;
     
     Entity title;
     Entity playButton;

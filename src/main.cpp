@@ -23,8 +23,11 @@ int main(int argc, char* argv[]) {
                 menu.showInfo();
                 break;
             case 4:
-                game.run();
-                menu.setState(1);
+                game.reset();
+                if(!game.run()) {
+                    menu.setFinalScore(game.getScore());
+                    menu.setState(5);
+                }
                 break;
             case 5:
                 menu.showGameOver();

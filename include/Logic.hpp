@@ -15,7 +15,7 @@ class Logic {
         
         bool isFrameActive(int frameIndex) const;
         double getScore() const { return score; }
-    
+        void resetScore() { score = 0.0; }
     private:
         double score = 0.0;
         std::vector<bool> frameActive;

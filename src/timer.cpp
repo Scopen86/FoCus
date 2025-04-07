@@ -3,7 +3,7 @@
 #include "Timer.hpp"
 
 Timer::Timer() 
-    :mLastTime(0), mDeltaTime(0.0f), mStarted(false), mStartTime(0)
+    :mStartTime(0), mLastTime(0), mDeltaTime(0.0f), mStarted(false)
 {}
 
 void Timer::start() {

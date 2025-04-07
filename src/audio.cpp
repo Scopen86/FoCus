@@ -27,3 +27,9 @@ void Audio::playSound() {
         }
     }
 }
+
+void Audio::stopSound() {
+    if(Mix_PlayingMusic()) {
+        Mix_HaltMusic();
+    }
+}

@@ -46,7 +46,7 @@ bool Game::init() {
     return true;
 }
 
-void Game::run() {
+bool Game::run() {
     gameTimer.start();
     backgroundMusic.playSound();
 
@@ -59,6 +59,8 @@ void Game::run() {
         update(deltaTime, currentTime);
         render(currentTime);
     }
+
+    return gameRunning;
 }
 
 void Game::handleEvents() {
@@ -82,6 +84,13 @@ void Game::update(float deltaTime, float currentTime) {
             target.update(deltaTime);
         }
     }
+
+    percentage = (currentTime / 200) * 100.0f;
+    if(percentage >= 100.0f) {
+        gameRunning = false;
+    }
+
+    score = logic.getScore();
 }
 
 void Game::render(float currentTime) {
@@ -103,9 +112,9 @@ void Game::render(float currentTime) {
     }
 
     std::stringstream ss;
-    ss << std::fixed << std::setprecision(2) << (currentTime / 190 * 100.0) << "%";
+    ss << std::fixed << std::setprecision(2) << (percentage) << "%";
     window.drawText(ss.str(), Vector2f(SCREEN_WIDTH / 2 - 30, 40), WHITE, 24);
-    window.drawText("Score: " + std::to_string(static_cast<int>(logic.getScore())), 
+    window.drawText("Score: " + std::to_string(score), 
                    Vector2f(SCREEN_WIDTH / 2 - 100, 80), WHITE, 24);
     
     window.display();
@@ -159,4 +168,19 @@ bool Game::loadTargets() {
         std::cout << "Failed to open ./res/level/targetTimings.txt file." << std::endl;
         return false;
     }
+}
+
+void Game::reset() {
+    gameRunning = true;
+    gameTimer.stop();
+    
+    backgroundMusic.stopSound();
+    
+    targets.clear();
+    loadTargets();
+    
+    logic.resetScore();
+    
+    percentage = 0.0f;
+    score = 0;
 }

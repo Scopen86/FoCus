@@ -9,6 +9,7 @@ class Audio {
         
         bool loadSound(const char* path);
         void playSound();
+        void stopSound();
     private:
         Mix_Chunk* soundChunk = nullptr;
 };

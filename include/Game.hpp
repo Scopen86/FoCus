@@ -14,11 +14,12 @@ public:
     ~Game();
     
     bool init();
-    void run();
+    bool run();
 
     void quit() { gameRunning = false; }
     RenderWindow& getWindow() { return window; }
-    
+    int getScore() const { return score; }
+    void reset();
 private:
     void handleEvents();
     void update(float deltaTime, float currentTime);
@@ -28,6 +29,7 @@ private:
     
     RenderWindow window;
     bool gameRunning;
+    int score;
     Timer gameTimer;
     Audio backgroundMusic;
     Logic logic;
@@ -41,4 +43,5 @@ private:
     std::vector<Entity> targets;
     
     SDL_Event event;
+    float percentage;
 };
