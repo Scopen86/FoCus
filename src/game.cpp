@@ -77,6 +77,7 @@ void Game::handleEvents() {
 
 void Game::update(float deltaTime, float currentTime) {
     logic.handleInput(frames, targets, currentTime);
+    logic.checkMissedTargets(targets, currentTime);
     
     for(Entity& target : targets) {
         if(currentTime >= target.getTiming() && 

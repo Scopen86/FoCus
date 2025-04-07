@@ -36,6 +36,8 @@ class Logic {
         int getOkayCount() const { return okayCount; }
         int getMissCount() const { return missCount; }
         
+        void checkMissedTargets(std::vector<Entity>& targets, float currentTime);
+        
     private:
         double score = 0.0;
         std::vector<bool> frameActive;

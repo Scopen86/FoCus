@@ -65,6 +65,23 @@ void Logic::calculateScore(Entity& frame, Entity& target) {
     }
 }
 
+void Logic::checkMissedTargets(std::vector<Entity>& targets, float currentTime) {
+    for(Entity& target : targets) {
+        if(currentTime >= target.getTiming() && 
+           target.getPosition().y > SCREEN_HEIGHT) {
+            
+            lastHitGrade = 0; // MISSED
+            missCount++;
+            resetCombo();
+            
+            // Move target out of screen to avoid counting it multiple times
+            target.moveOutOfScreen();
+            
+            std::cout << "Target missed!" << std::endl;
+        }
+    }
+}
+
 const std::string Logic::getGradeString() const {
     switch (lastHitGrade) {
         case 4: return "PERFECT";
