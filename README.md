@@ -9,15 +9,13 @@
 
 - **Họ và tên:** Nguyễn Ngọc Quý - K69I-IT2  
 - **Mã sinh viên:** 24020290  
-- **Bài tập lớn:** FoCus - Một trò chơi nhịp điệu hành động lấy cảm hứng từ *Osu! Mania* và *Friday Night Funkin’*
+- **Bài tập lớn:** FoCus - Một trò chơi nhịp điệu lấy cảm hứng từ *Osu! Mania* và *Friday Night Funkin'*
 
 ---
 
 ## **Giới thiệu**
 
-**FoCus** là một trò chơi nhịp điệu hành động. Nhiệm vụ của người chơi là hoàn thành bản nhạc với số điểm cao nhất bằng cách nhấn các phím theo đúng nhịp điệu và thời điểm.  
-
-👉 *Video thử nghiệm game:*
+**FoCus** là một trò chơi nhịp điệu. Nhiệm vụ của người chơi là hoàn thành bản nhạc với số điểm cao nhất bằng cách nhấn các phím theo đúng nhịp điệu và thời điểm.  
 
 ---
 
@@ -27,11 +25,10 @@
   - [a. Cách 1: Không bao gồm mã nguồn](#a-cách-1-không-bao-gồm-mã-nguồn)  
   - [b. Cách 2: Bao gồm mã nguồn và có thể biên dịch](#b-cách-2-bao-gồm-mã-nguồn-và-có-thể-biên-dịch)  
 - [1. Bắt đầu game](#1-bắt-đầu-game)  
-- [2. Chọn level](#2-chọn-level)  
-- [3. Cách chơi](#3-cách-chơi)  
-- [4. Kết thúc level](#4-kết-thúc-level)  
-- [5. Source code](#5-source-code)  
-- [6. Credits](#6-credits)  
+- [2. Cách chơi](#2-cách-chơi)  
+- [3. Kết thúc level](#3-kết-thúc-level)  
+- [4. Source code](#4-source-code)  
+- [5. Credits](#5-credits)  
 
 ---
 
@@ -58,7 +55,7 @@
 
 #### **Bước 2:** Cài đặt MinGW và GNU Make
 
-Cài qua [Chocolatey](https://chocolatey.org/install), sau đó mở `cmd` và chạy:
+- Có thể cài bằng nhiều cách, mình sẽ cài qua [Chocolatey](https://chocolatey.org/install):
 
 ```
 choco install mingw -y
@@ -81,15 +78,7 @@ make
 
 ---
 
-## 2. Chọn level
-
-- Game hiện có **2 level** với độ khó khác nhau.  
-- Khi di chuột lên một level, level đó sẽ phát sáng.  
-- Click chuột để bắt đầu chơi level đã chọn.
-
----
-
-## 3. Cách chơi
+## 2. Cách chơi
 
 - Sử dụng các phím **D, F, J, K** khi mũi tên rơi chạm đúng vạch ngang.  
 - Điểm được tính dựa trên độ chính xác.  
@@ -97,14 +86,14 @@ make
 
 ---
 
-## 4. Kết thúc level
+## 3. Kết thúc level
 
 - Game hiển thị kết quả: tổng điểm, độ chính xác, và combo cao nhất đạt được.  
 - Bạn có thể chọn chơi lại hoặc quay lại menu chính.
 
 ---
 
-## 5. Source Code
+## 4. Source Code
 
 ### Thư mục chính:
 
@@ -126,15 +115,15 @@ make
 ### Kỹ thuật sử dụng:
 
 - SDL2.0, SDL_Image, SDL_TTF, SDL_Mixer  
-- Quản lý thời gian bằng `deltaTime` (không phụ thuộc FPS)  
+- Di chuyển đối tượng bằng `deltaTime` (không phụ thuộc FPS)  
 - Sử dụng class, vector, overloading,...  
-- Ghi/đọc file: lưu điểm cao, đọc level  
+- Ghi/đọc file: lưu điểm cao, đọc level
 - Hệ thống menu linh hoạt
 - Render hiệu quả hình ảnh, văn bản, và âm thanh
 
 ---
 
-## 6. Credits
+## 5. Credits
 
 - Cách quản lý thư mục, cài đặt SDL2 và makefile và một vài phần của các class RenderWindow, Entity, Vector2f trên [tutorial kênh Youtube codergopher](https://www.youtube.com/watch?v=KsG6dJlLBDw&list=PL2RPjWnJduNmXHRYwdtublIPdlqocBoLS)
 
