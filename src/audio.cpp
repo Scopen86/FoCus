@@ -33,7 +33,7 @@ void Audio::playSound() {
 }
 
 void Audio::stopSound() {
-    if(Mix_PlayingMusic()) {
-        Mix_HaltMusic();
+    if (Mix_Playing(-1)) {
+        Mix_HaltChannel(-1);
     }
 }
