@@ -9,13 +9,19 @@
 Menu::Menu(RenderWindow& p_window)
     :state(1), window(p_window), finalScore(0.0),
     title(window.loadTexture("./res/textures/menu/title.png"), Vector2f((SCREEN_WIDTH - DEFAULT_LONG_SIZE.x) / 2, 50), DEFAULT_LONG_SIZE),
-    playButton(window.loadTexture("./res/textures/menu/play_button.png"), Vector2f((SCREEN_WIDTH - DEFAULT_SIZE.x * 2) / 2, 250), DEFAULT_SIZE * 2),
-    infoButton(window.loadTexture("./res/textures/menu/info_button.png"), Vector2f((SCREEN_WIDTH - DEFAULT_SIZE.x * 2) / 2, 500), DEFAULT_SIZE * 2),
+
+    playButton(window.loadTexture("./res/textures/menu/play_button.png"), Vector2f((SCREEN_WIDTH - DEFAULT_SIZE.x * 2) / 2, 300), DEFAULT_SIZE * 2),
+    playButtonHover(window.loadTexture("./res/textures/menu/play_hover.png"), Vector2f((SCREEN_WIDTH - DEFAULT_SIZE.x * 2) / 2, 300), DEFAULT_SIZE * 2),
+
+    infoButton(window.loadTexture("./res/textures/menu/info_button.png"), Vector2f((SCREEN_WIDTH - DEFAULT_SIZE.x * 2) / 2, 550), DEFAULT_SIZE * 2),
+    infoButtonHover(window.loadTexture("./res/textures/menu/info_hover.png"), Vector2f((SCREEN_WIDTH - DEFAULT_SIZE.x * 2) / 2, 550), DEFAULT_SIZE * 2),
     info(window.loadTexture("./res/textures/menu/info.png"), Vector2f(0, 0), Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT)),
 
     gameOver(window.loadTexture("./res/textures/menu/game_over.png"), Vector2f(0, 0), Vector2f(SCREEN_WIDTH, SCREEN_HEIGHT)),
-    restartButton(window.loadTexture("./res/textures/menu/restart_button.png"), Vector2f((SCREEN_WIDTH - DEFAULT_SIZE.x * 2) / 2, 250), DEFAULT_SIZE * 2), 
-    homeButton(window.loadTexture("./res/textures/menu/home_button.png"), Vector2f((SCREEN_WIDTH - DEFAULT_SIZE.x * 2) / 2, 500), DEFAULT_SIZE * 2) {
+    restartButton(window.loadTexture("./res/textures/menu/restart_button.png"), Vector2f((SCREEN_WIDTH - DEFAULT_SIZE.x * 2) / 2, 300), DEFAULT_SIZE * 2),
+    restartButtonHover(window.loadTexture("./res/textures/menu/restart_hover.png"), Vector2f((SCREEN_WIDTH - DEFAULT_SIZE.x * 2) / 2, 300), DEFAULT_SIZE * 2),
+    homeButton(window.loadTexture("./res/textures/menu/home_button.png"), Vector2f((SCREEN_WIDTH - DEFAULT_SIZE.x * 2) / 2, 550), DEFAULT_SIZE * 2),
+    homeButtonHover(window.loadTexture("./res/textures/menu/home_hover.png"), Vector2f((SCREEN_WIDTH - DEFAULT_SIZE.x * 2) / 2, 550), DEFAULT_SIZE * 2) {
 }
 
 Menu::~Menu() {
@@ -28,18 +34,12 @@ Menu::~Menu() {
     SDL_DestroyTexture(homeButton.getTex());
 }
 
-// Menu::isHovering(Entity& button) {
-//     int mouseX, mouseY;
-//     SDL_GetMouseState(&mouseX, &mouseY); 
-//     if (mouseX >= button.getPosition().x && mouseX <= button.getPosition().x + button.getSize().x &&
-//         mouseY >= button.getPosition().y && mouseY <= button.getPosition().y + button.getSize().y) {
-//         // Change texture to indicate hover
-//         button.setTex(window.loadTexture("./res/textures/menu/hover_button.png"));
-//     } else {
-//         // Reset to original texture
-//         button.setTex(window.loadTexture("./res/textures/menu/play_button.png"));
-//     }
-// }
+bool Menu::isHovering(Entity& button) {
+    int mouseX, mouseY;
+    SDL_GetMouseState(&mouseX, &mouseY); 
+    return (mouseX >= button.getPosition().x && mouseX <= button.getPosition().x + button.getSize().x &&
+            mouseY >= button.getPosition().y && mouseY <= button.getPosition().y + button.getSize().y);
+}
 
 void Menu::showMenu() {
     bool quit = false;
@@ -52,6 +52,13 @@ void Menu::showMenu() {
         window.draw(playButton);
         window.draw(infoButton);
         
+        if (isHovering(playButton)) {
+            window.draw(playButtonHover);
+        }
+        if (isHovering(infoButton)) {
+            window.draw(infoButtonHover);
+        }
+
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {
                 state = 0; // Quit state
@@ -152,6 +159,13 @@ void Menu::showGameOver() {
         
         window.draw(restartButton);
         window.draw(homeButton);
+
+        if (isHovering(restartButton)) {
+            window.draw(restartButtonHover);
+        }
+        if (isHovering(homeButton)) {
+            window.draw(homeButtonHover);
+        }
 
         while (SDL_PollEvent(&event)) {
             if (event.type == SDL_QUIT) {

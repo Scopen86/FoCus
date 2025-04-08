@@ -24,6 +24,7 @@ class Entity {
         // };
 
         SDL_Texture* getTex() const { return tex; }
+        SDL_Texture* setTex(SDL_Texture* p_tex) { tex = p_tex; return tex; }
         Vector2f getPosition() const { return pos; }
         Vector2f getSize() const { return size; }
         float getVelocity() const { return fallVel; }

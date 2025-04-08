@@ -52,7 +52,7 @@
   ```
   hoặc chọn **Code → Download ZIP**
 
-![Download](resources/preview/download.png)
+![Download](preview/download.png)
 
 > Mã nguồn nằm trong thư mục `src/`, file header trong `include/`
 
