@@ -1,5 +1,3 @@
-[[English]](README_en.md)
-
 # **FoCus - README**  
 ### Môn học: Lập trình nâng cao (INT2215_2 2425)
 
@@ -62,7 +60,18 @@ choco install mingw -y
 choco install make -y
 ```
 
-#### **Bước 3:** Mở terminal tại thư mục chứa Makefile và gõ:
+#### **Bước 3:** Compile game sử dụng make:
+
+- Đảm bảo thư viện SDL2 và các extension sau ở thư mục gốc gốc ổ C:
+  - C:\SDL2-w64, C:\SDL2_image-w64, C:\SDL2_TTF-w64, C:\SDL2_Mixer-w64
+
+- Trong đó:
+  - C:\SDL2-w64\include\SDL2: chứa các file .h
+  - C:\SDL2-w64\lib: chứa các file .a / .la
+  
+  - Tương tự cho các thư viện SDL2_image, SDL2_ttf, và SDL2_mixer
+
+- Sau đó chạy lệnh sau trong terminal
 
 ```
 make
@@ -76,6 +85,8 @@ make
 
 - Chờ game khởi động, sau đó click vào nút **Bắt đầu** (icon) để vào trò chơi.
 
+![HomeMenu](preview/home.png)
+
 ---
 
 ## 2. Cách chơi
@@ -84,12 +95,17 @@ make
 - Điểm được tính dựa trên độ chính xác.  
 - **Combo** sẽ làm tăng hệ số điểm.
 
+![Instruction](preview/instruction.png)
+![Gameplay](preview/game.png)
+
 ---
 
 ## 3. Kết thúc level
 
-- Game hiển thị kết quả: tổng điểm, độ chính xác, và combo cao nhất đạt được.  
+- Game hiển thị kết quả: tổng điểm, high score, và combo cao nhất đạt được.  
 - Bạn có thể chọn chơi lại hoặc quay lại menu chính.
+
+![EndMenu](preview/end.png)
 
 ---
 
